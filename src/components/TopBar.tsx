@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Film, Menu } from "lucide-react";
+import { Film, Menu, Youtube, Twitter } from "lucide-react";
 
 export function TopBar({ onToggleMenu }: { onToggleMenu: () => void }) {
   return (
@@ -7,41 +7,40 @@ export function TopBar({ onToggleMenu }: { onToggleMenu: () => void }) {
       <div className="flex items-center gap-4">
         <Film className="w-9 h-9 text-primary-container" strokeWidth={2.5} />
         <Link to="/">
-          <h1 className="font-headline text-4xl lg:text-5xl font-black italic tracking-tighter text-primary-container lg:text-primary uppercase drop-shadow-[4px_4px_0px_rgba(0,0,0,1)]">
-            Synthetic
+          <h1 className="font-headline text-2xl lg:text-3xl font-black italic tracking-tighter text-primary-container lg:text-primary uppercase drop-shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+            Gokul Experiments
           </h1>
         </Link>
       </div>
       <div className="hidden md:flex gap-8 items-center">
         <nav className="flex gap-6 items-center">
-          <Link
-            to="/latest"
-            className="text-on-surface-variant font-bold text-sm uppercase hover:text-primary hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+          <a
+            href="https://www.youtube.com/@GokulExperiments"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-on-surface-variant font-bold text-sm uppercase hover:text-[#FF0000] hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center gap-2"
           >
-            Latest
-          </Link>
-          <Link
-            to="/trending"
-            className="text-primary-container font-black border-b-4 border-primary-container pb-1 text-sm uppercase scale-95 transition-transform"
+            <Youtube className="w-5 h-5" />
+            YouTube
+          </a>
+          <a
+            href="https://x.com/gokula2005"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-on-surface-variant font-bold text-sm uppercase hover:text-[#1DA1F2] hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center gap-2"
           >
-            Action
-          </Link>
-          <Link
-            to="/classics"
-            className="text-on-surface-variant font-bold text-sm uppercase hover:text-primary hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
-          >
-            Classics
-          </Link>
-          <Link
-            to="/mylist"
-            className="text-on-surface-variant font-bold text-sm uppercase hover:text-primary hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
-          >
-            My List
-          </Link>
+            <Twitter className="w-5 h-5" />
+            Twitter
+          </a>
         </nav>
-        <button className="bg-primary-container text-black font-bold text-sm border-2 border-black px-6 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] comic-btn-hover uppercase tracking-widest">
-          Sign In
-        </button>
+        <a 
+          href="https://www.youtube.com/@GokulExperiments" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="bg-[#FF0000] text-white font-bold text-sm border-2 border-black px-6 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] comic-btn-hover uppercase tracking-widest inline-block text-center"
+        >
+          Subscribe
+        </a>
       </div>
       <div className="md:hidden">
         <button className="text-primary-container" onClick={onToggleMenu}>

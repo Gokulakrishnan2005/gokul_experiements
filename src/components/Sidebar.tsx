@@ -13,9 +13,9 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
         )}
         <UserCircle className="w-12 h-12 text-black mb-2" strokeWidth={1.5} />
         <h2 className="font-headline text-2xl uppercase tracking-widest text-black font-black italic">
-          OPERATIVE_01
+          GOKUL
         </h2>
-        <p className="font-bold text-sm text-black opacity-80">Level 99 Critic</p>
+        <p className="font-bold text-sm text-black opacity-80">Creator & Host</p>
       </div>
       <div className="flex-1 flex flex-col p-2 gap-2 mt-4 overflow-y-auto">
         <NavItem to="/" icon={<Home />} label="Home" />
