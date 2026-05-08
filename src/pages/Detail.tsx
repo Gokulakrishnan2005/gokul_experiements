@@ -1,47 +1,15 @@
-import { Play, Plus, Code, Copy, Check } from "lucide-react";
+import { Play, Plus, Code, Copy, Check, Bookmark, BookmarkCheck } from "lucide-react";
 import { useParams } from "react-router";
 import { useState } from "react";
-
-const VIDEO_DATA: Record<string, any> = {
-  "claude-3-5": {
-    title: "Mastering Claude 3.5 Sonnet for Complex Coding Tasks",
-    synopsis: "Claude 3.5 Sonnet represents a quantum leap in AI-assisted development. This module covers the core architectures of prompt engineering specifically for technical workflows, focusing on maintaining context across large codebases, utilizing the Artifacts UI for rapid prototyping, and leveraging the model's enhanced reasoning capabilities for debugging complex system failures.",
-    prompt: "You are a Senior Technical Architect with expertise in distributed systems and performance optimization. Your goal is to review the following code and suggest improvements based on scalability, readability, and the SOLID principles. Provide refactored code blocks using the Artifacts interface.",
-    tag1: "Cyber-Noir", tag2: "4K UHD",
-    imgUrl: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=1200",
-    steps: [
-      { title: "Set Role and Context", desc: "Begin by establishing the technical persona. Define the specific expertise required and provide the high-level architecture of the existing codebase to ensure context window efficiency." },
-      { title: "Execute and Refine", desc: "Run the initial prompt and use iterative feedback. Leverage the 'Artifacts' view to visualize changes and maintain a clean separation between architectural discussion and implementation code." }
-    ]
-  },
-  "chatgpt-zapier": {
-    title: "ChatGPT + Zapier: Automating Growth",
-    synopsis: "Build autonomous social media agents that create, schedule, and engage with your audience 24/7. This system guide walks you through setting up webhooks, formatting JSON payloads, and creating a continuous content loop.",
-    prompt: "You are an expert Social Media Automation Strategist. Your goal is to generate engaging, viral-ready posts based on the provided topic. Output the result in valid JSON format with 'platform', 'content', and 'hashtags' keys so Zapier can parse it directly.",
-    tag1: "Automation", tag2: "System",
-    imgUrl: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=1200",
-    steps: [
-      { title: "Configure Trigger", desc: "Set up your initial trigger in Zapier (e.g., RSS feed, email, or schedule) to initiate the workflow." },
-      { title: "Format the Prompt", desc: "Use the system prompt below in your ChatGPT action step. Ensure you pass the dynamic variables correctly to guarantee standard JSON output." }
-    ]
-  },
-  "midjourney-v6": {
-    title: "Midjourney v6: Photo-Realism",
-    synopsis: "Master the latest parameters and prompting structures for ultra-realistic image generation. This guide details lighting, camera angles, and film stock emulation.",
-    prompt: "/imagine prompt: A cinematic portrait shot of a cyberpunk operative in a neon-lit alleyway, hyper-detailed, 8k resolution, photorealistic, shot on 35mm lens, dramatic lighting, volumetric fog --ar 16:9 --style raw --v 6.0",
-    tag1: "Pro Secrets", tag2: "Visuals",
-    imgUrl: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?auto=format&fit=crop&q=80&w=1200",
-    steps: [
-      { title: "Define the Subject", desc: "Start with a clear, concise description of the main subject and action." },
-      { title: "Add Parameters", desc: "Append technical camera parameters and Midjourney specific flags (--ar, --v, --style) to dial in the aesthetic." }
-    ]
-  }
-};
+import { VIDEOS } from "../data/videos";
+import { useWatchlist } from "../hooks/useWatchlist";
 
 export function Detail() {
   const { id } = useParams();
-  const data = VIDEO_DATA[id as string] || VIDEO_DATA["claude-3-5"];
+  const data = VIDEOS[id as keyof typeof VIDEOS] || VIDEOS["openclaw-ai-agents"];
   const [copied, setCopied] = useState(false);
+  const { isInWatchlist, toggleWatchlist } = useWatchlist();
+  const isSaved = isInWatchlist(data.id);
 
   const handleCopy = async () => {
     try {
@@ -75,12 +43,21 @@ export function Detail() {
             {data.title}
           </h1>
           <div className="flex flex-wrap items-center gap-4 mt-4">
-            <button className="bg-primary-container text-on-primary-container border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] px-6 py-2 font-headline text-xl uppercase flex items-center gap-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-100">
+            <a 
+              href={`https://youtu.be/${data.youtubeId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-primary-container text-on-primary-container border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] px-6 py-2 font-headline text-xl uppercase flex items-center gap-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-100"
+            >
               <Play className="w-6 h-6 fill-current" />
               PLAY NOW
-            </button>
-            <button className="bg-surface-container text-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-100">
-              <Plus className="w-6 h-6" />
+            </a>
+            <button 
+              onClick={() => toggleWatchlist(data.id)}
+              className={`text-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-100 ${isSaved ? 'bg-primary-container text-black' : 'bg-surface-container'}`}
+              title={isSaved ? "Remove from Watchlist" : "Add to Watchlist"}
+            >
+              {isSaved ? <BookmarkCheck className="w-6 h-6" /> : <Bookmark className="w-6 h-6" />}
             </button>
           </div>
         </div>
@@ -151,15 +128,15 @@ export function Detail() {
             <ul className="flex flex-col gap-4">
               <li className="flex justify-between border-b-2 border-dashed border-[#4d4732] pb-2">
                 <span className="font-bold text-sm text-on-surface-variant uppercase">Runtime</span>
-                <span className="font-body text-base text-primary font-bold">120 MINS</span>
+                <span className="font-body text-base text-primary font-bold">{data.runtime}</span>
               </li>
               <li className="flex justify-between border-b-2 border-dashed border-[#4d4732] pb-2">
-                <span className="font-bold text-sm text-on-surface-variant uppercase">Rating</span>
-                <span className="bg-error text-on-error px-2 py-0.5 font-black text-sm border border-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">RESTRICTED</span>
+                <span className="font-bold text-sm text-on-surface-variant uppercase">Category</span>
+                <span className="bg-primary-container text-on-primary-container px-2 py-0.5 font-black text-sm border border-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] uppercase">{data.category}</span>
               </li>
               <li className="flex justify-between pb-1">
-                <span className="font-bold text-sm text-on-surface-variant uppercase">Director</span>
-                <span className="font-body text-base text-primary font-bold">A.I. CORE</span>
+                <span className="font-bold text-sm text-on-surface-variant uppercase">Creator</span>
+                <span className="font-body text-base text-primary font-bold uppercase">{data.creator}</span>
               </li>
             </ul>
           </div>
